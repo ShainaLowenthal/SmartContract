@@ -24,3 +24,6 @@ Another variation could be a guessing game in which a user sends a certain amoun
 A further variation of the above concept is “Russian Roulette,” in which if the number guess is too far away, the user is eliminated and has little or no chance at winning the pot. As such, this game would have a higher entry cost, fewer players, and higher winnings for those remaining.
  
 Another version of “Russian Roulette” exists without a user needing to enter a guess, rather a certain number of random users will be eliminated before the lottery concludes and a winner is chosen. This could be accomplished by either randomly eliminating X users just before the random winner is selected or by eliminating a participant based on their ticket number. For example, tickets 76 and 138 cannot win the lottery. These ticket numbers can reset every round.
+
+##  Properly Styled Interface of Contract with Function and Event Headers
+This is included in a file which can be found in this repo called `interface.sol`
