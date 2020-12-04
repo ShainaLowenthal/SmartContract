@@ -3,7 +3,7 @@
 ## Group Members & Emails:
 
 
-* Tal Bachar - Tal@Bachar.co.il
+* Tal Bachar - Tal.Bachar59@myhunter.cuny.edu
 * Shaina Lowenthal - shaina.lowenthal96@myhunter.cuny.edu
 * Chloe Gottlieb - crbgott@gmail.com
 * Alex Shmarkatyuk - matroskind@gmail.com
