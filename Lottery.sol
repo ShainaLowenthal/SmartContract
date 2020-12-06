@@ -18,11 +18,11 @@ contract Lottery {
     }
      
     function MainLottoEntry() public payable {
-	require(msg.value == 0.1 ether);  	///changed msg.sender to msg.value
+	require(msg.value == 1 ether);  	///changed msg.sender to msg.value
 	//participantsMain[MainParticipantCount]=msg.sender;
 	participantsMain.push(msg.sender);
 	MainParticipantCount++;
-	MainLottoFunds+=5;
+	MainLottoFunds+=1;
     }
     
     function MainLottoEnd() public {
@@ -38,6 +38,10 @@ contract Lottery {
     
     function getPlayers() public view returns(address[]) {
         return participantsMain;
+    } 
+
+    function getFunds() public view returns(uint){
+        return MainLottoFunds;
     } 
     
 } /// end of contract
