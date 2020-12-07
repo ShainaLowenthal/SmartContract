@@ -2,11 +2,11 @@ pragma solidity ^0.4.18;
 
 contract Lottery {
 	 
-    uint MainLottoFunds; 		/// funds up for grabs in main lotto
-    uint GuessingLottoTarget; 		/// current guessing target in guessing lotto
-    address[] participantsMain;  	/// this holds all participant addresses in the main lotto
-    uint256 MainParticipantCount; 	/// this keeps count of the number of main lotto participants
-    address public lotteryManager;      /// this is the person in charge of the lottery
+    uint MainLottoFunds; 		// funds up for grabs in main lotto
+    uint GuessingLottoTarget; 		// current guessing target in guessing lotto
+    address[] participantsMain;  	// this holds all participant addresses in the main lotto
+    uint256 MainParticipantCount; 	// this keeps count of the number of main lotto participants
+    address public lotteryManager;      // this is the person in charge of the lottery
 
     constructor() public {
         lotteryManager=msg.sender;
@@ -18,7 +18,7 @@ contract Lottery {
     }
      
     function MainLottoEntry() public payable {
-	require(msg.value == 1 ether);  	///changed msg.sender to msg.value
+	require(msg.value == 1 ether);  	//changed msg.sender to msg.value
 	//participantsMain[MainParticipantCount]=msg.sender;
 	participantsMain.push(msg.sender);
 	MainParticipantCount++;
@@ -27,13 +27,12 @@ contract Lottery {
     
     function MainLottoEnd() public payable {
         require(msg.sender == lotteryManager);
-	    uint winning_index = random() % participantsMain.length; //randomly generate winner
+	    uint winning_index = random() % participantsMain.length; 			    //randomly generate winner
 	    participantsMain[winning_index].transfer(MainLottoFunds * 1000000000000000000); // send funds to winner
-	    MainLottoFunds=0; // reset fund counter
-	    MainParticipantCount=0; // reset participant counter
-	    delete participantsMain; // reset participant address array
+	    MainLottoFunds=0; 								    // reset fund counter
+	    MainParticipantCount=0; 							    // reset participant counter
+	    delete participantsMain; 							    // reset participant address array
 	    participantsMain = new address[](0);
-	
     }    
     
     function getPlayers() public view returns(address[]) {
@@ -45,10 +44,10 @@ contract Lottery {
     } 
     
     function () public payable {
-        
+        // default blank function
     }
     
-} /// end of contract
+} // end of contract
 
 contract Destructible is Lottery {
     function destroy() public  {
