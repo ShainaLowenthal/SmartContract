@@ -25,15 +25,15 @@ contract Lottery {
 	MainLottoFunds+=1;
     }
     
-    function MainLottoEnd() public {
+    function MainLottoEnd() public payable {
         require(msg.sender == lotteryManager);
-	//uint winning_index = 7;
-	uint winning_index = random() % participantsMain.length;
-	participantsMain[winning_index].transfer(MainLottoFunds);
-	MainLottoFunds=0;
-	MainParticipantCount=0;
-	//delete participantsMain;
-	participantsMain = new address[](0);
+	    uint winning_index = random() % participantsMain.length; //randomly generate winner
+	    participantsMain[winning_index].transfer(MainLottoFunds * 1000000000000000000); // send funds to winner
+	    MainLottoFunds=0; // reset fund counter
+	    MainParticipantCount=0; // reset participant counter
+	    delete participantsMain; // reset participant address array
+	    participantsMain = new address[](0);
+	
     }    
     
     function getPlayers() public view returns(address[]) {
@@ -43,6 +43,10 @@ contract Lottery {
     function getFunds() public view returns(uint){
         return MainLottoFunds;
     } 
+    
+    function () public payable {
+        
+    }
     
 } /// end of contract
 
