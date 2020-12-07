@@ -6,19 +6,19 @@ contract Lottery {
     uint GuessingLottoFunds;
     uint WeightedLottoFunds; //funds up for grabs in weighted lotto
 //    uint RRouletteFunds; ///funds up for grabs in russian roulette lotto
-//    uint RandomRRouletteFunds; //funds up for grabs in the random russian roulette
+    uint RandomRRouletteLottoFunds; //funds up for grabs in the random russian roulette
     
     uint GuessingLottoTarget; 		// current guessing target in guessing lotto
 //    uint RRouletteLottoTarget; //current guessing target in russian roulette
-//   uint RandomRRouletteLottoTarget; //current guessing target in russian roulette with random elimination
+   uint RandomRRouletteLottoTarget; //current guessing target in russian roulette with random elimination
 
     address[] participantsMain;  	// this holds all participant addresses in the main lotto
     address[] participantsWeighted;  	// this holds all participant addresses in the main lotto
     mapping(address => uint) public weights;  /// This stores each participants betting weight
 //    address[] EliminatedParticipantsRRoulette;  ///This holds a list of all participants barred from the Russian roulette lotto
 //    mapping(address => int) public EliminatedStatus; //This tracks whether a participant is banned from the russian roulette lotto or not. By default, each address is mapped to 0, which is acceptable. When an address guesses too poorly, it is switched to -1.
-//    address[] EliminatedParticipantsRandomRRoulette; ///This holds a list of all participants barred from the Russian roulette lotto
-//    mapping(address => int) public RandomEliminatedStatus; //This tracks whether a participant is banned from the russian roulette lotto or not. By default, each address is mapped to 0, which is acceptable. When an address guesses too poorly, it is switched to -1.
+    address[] EliminatedParticipantsRandomRRoulette; ///This holds a list of all participants barred from the Russian roulette lotto
+    mapping(address => uint) public RandomEliminatedStatus; //This tracks whether a participant is banned from the russian roulette lotto or not. By default, each address is mapped to 0, which is acceptable. When an address guesses too poorly, it is switched to -1.
 
 
     address public lotteryManager;      // this is the person in charge of the lottery
@@ -115,7 +115,35 @@ contract Lottery {
     } 
     
     
+    function RandomRRouletteEntry(uint guess) public payable {
+        require(msg.value == 1 ether, "Please pay exactly one ether");
+        require(RandomEliminatedStatus[msg.sender]!=1, "Please wait until you may enter again");
+
+        RandomRRouletteLottoFunds+=msg.value;
+        if (guess==RandomRRouletteLottoTarget && RandomEliminatedStatus[msg.sender]!=1) {
+            msg.sender.transfer(RandomRRouletteLottoFunds);
+            RandomRRouletteLottoFunds=0;
+            for (uint i=0;i<EliminatedParticipantsRandomRRoulette.length;i++) {
+                RandomEliminatedStatus[EliminatedParticipantsRandomRRoulette[i]]=0;
+            }
+            delete EliminatedParticipantsRandomRRoulette;
+	        EliminatedParticipantsRandomRRoulette = new address[](0);
+        }
+        else if (RandomEliminatedStatus[msg.sender]==0 && random() % 6 != 1) {
+            EliminatedParticipantsRandomRRoulette.push(msg.sender);
+            RandomEliminatedStatus[msg.sender]=1;
+        }
+        UpdateRandomRRouletteLottoTarget();
+    }
     
+    function UpdateRandomRRouletteLottoTarget() private {
+        RandomRRouletteLottoTarget=random() % 3;
+    }
+
+
+    function getRandomRRouletteLottoFunds() public view returns(uint){
+        return RandomRRouletteLottoFunds;
+    } 
     function () public payable {
         // default blank function
     }
@@ -128,3 +156,4 @@ contract Lottery {
 
 
 /// Styled according to Style Guide v0.5.13 
+
