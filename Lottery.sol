@@ -4,9 +4,23 @@ contract Lottery {
 	 
     uint MainLottoFunds; 		// funds up for grabs in main lotto
     uint GuessingLottoFunds;
+    uint WeightedLottoFunds; //funds up for grabs in weighted lotto
+//    uint RRouletteFunds; ///funds up for grabs in russian roulette lotto
+//    uint RandomRRouletteFunds; //funds up for grabs in the random russian roulette
+    
     uint GuessingLottoTarget; 		// current guessing target in guessing lotto
+//    uint RRouletteLottoTarget; //current guessing target in russian roulette
+//   uint RandomRRouletteLottoTarget; //current guessing target in russian roulette with random elimination
+
     address[] participantsMain;  	// this holds all participant addresses in the main lotto
-    uint256 MainParticipantCount; 	// this keeps count of the number of main lotto participants
+    address[] participantsWeighted;  	// this holds all participant addresses in the main lotto
+    mapping(address => uint) public weights;  /// This stores each participants betting weight
+//    address[] EliminatedParticipantsRRoulette;  ///This holds a list of all participants barred from the Russian roulette lotto
+//    mapping(address => int) public EliminatedStatus; //This tracks whether a participant is banned from the russian roulette lotto or not. By default, each address is mapped to 0, which is acceptable. When an address guesses too poorly, it is switched to -1.
+//    address[] EliminatedParticipantsRandomRRoulette; ///This holds a list of all participants barred from the Russian roulette lotto
+//    mapping(address => int) public RandomEliminatedStatus; //This tracks whether a participant is banned from the russian roulette lotto or not. By default, each address is mapped to 0, which is acceptable. When an address guesses too poorly, it is switched to -1.
+
+
     address public lotteryManager;      // this is the person in charge of the lottery
 
     constructor() public {
@@ -21,21 +35,27 @@ contract Lottery {
      
     function MainLottoEntry() public payable {
 	require(msg.value == 1 ether, "Please pay exactly one ether");  	//changed msg.sender to msg.value
-	//participantsMain[MainParticipantCount]=msg.sender;
 	participantsMain.push(msg.sender);
-	MainParticipantCount++;
-	MainLottoFunds+=1;
+	MainLottoFunds+=1000000000000000000;
     }
     
     function MainLottoEnd() public payable {
         require(msg.sender == lotteryManager);
 	    uint winning_index = random() % participantsMain.length; 			    //randomly generate winner
-	    participantsMain[winning_index].transfer(MainLottoFunds * 1000000000000000000); // send funds to winner
+	    participantsMain[winning_index].transfer(MainLottoFunds); // send funds to winner
 	    MainLottoFunds=0; 								    // reset fund counter
-	    MainParticipantCount=0; 							    // reset participant counter
 	    delete participantsMain; 							    // reset participant address array
 	    participantsMain = new address[](0);
     }    
+    
+    function getMainLottoPlayers() public view returns(address[]) {
+        return participantsMain;
+    } 
+
+
+    function getMainLottoFunds() public view returns(uint){
+        return MainLottoFunds;
+    } 
     
     function GuessingLottoEntry(uint guess) public payable {
         require(msg.value == 1 ether, "Please pay exactly one ether");
@@ -51,17 +71,50 @@ contract Lottery {
         GuessingLottoTarget=random() % 10;
     }
 
-    function getMainLottoPlayers() public view returns(address[]) {
-        return participantsMain;
-    } 
 
-    function getMainLottoFunds() public view returns(uint){
-        return MainLottoFunds;
-    } 
-    
     function getGuessingLottoFunds() public view returns(uint){
         return GuessingLottoFunds;
     } 
+    
+    function WeightedLottoEntry() public payable {
+        weights[msg.sender]=msg.value;
+        participantsWeighted.push(msg.sender);
+        WeightedLottoFunds+=msg.value;
+    }
+    
+    function WeightedLottoEnd() public{
+        require(msg.sender == lotteryManager);
+        uint winning_weight = random() % (WeightedLottoFunds / 1000000000000000000);
+        uint current_tally=(weights[participantsWeighted[0]] / 1000000000000000000);
+        uint prev_tally=0;
+        if (winning_weight<=current_tally) {
+            participantsWeighted[0].transfer(WeightedLottoFunds);
+        }
+        else {
+            uint i=1;
+            while (i < participantsWeighted.length) {
+                prev_tally = current_tally;
+                current_tally+=(weights[participantsWeighted[i]] / 1000000000000000000);
+                if  (winning_weight >= prev_tally && winning_weight <= current_tally) {                            
+                    participantsWeighted[i].transfer(WeightedLottoFunds);
+                }
+            i++;
+            } 
+        }
+        WeightedLottoFunds=0;
+        delete participantsWeighted;
+	    participantsWeighted = new address[](0);
+    }    
+
+    function getWeightedLottoPlayers() public view returns(address[]) {
+        return participantsWeighted;
+    } 
+    
+    function getWeightedLottoFunds() public view returns(uint){
+        return WeightedLottoFunds / 1000000000000000000;
+    } 
+    
+    
     
     function () public payable {
         // default blank function
