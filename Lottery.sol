@@ -3,6 +3,7 @@ pragma solidity ^0.4.18;
 contract Lottery {
 	 
     uint MainLottoFunds; 		// funds up for grabs in main lotto
+    uint GuessingLottoFunds;
     uint GuessingLottoTarget; 		// current guessing target in guessing lotto
     address[] participantsMain;  	// this holds all participant addresses in the main lotto
     uint256 MainParticipantCount; 	// this keeps count of the number of main lotto participants
@@ -10,7 +11,8 @@ contract Lottery {
 
     constructor() public {
         lotteryManager=msg.sender;
-    	MainLottoFunds=0;	
+    	MainLottoFunds=0;
+    	UpdateGuessingLottoTarget();
     }
     
     function random() private view returns(uint) {
@@ -18,7 +20,7 @@ contract Lottery {
     }
      
     function MainLottoEntry() public payable {
-	require(msg.value == 1 ether);  	//changed msg.sender to msg.value
+	require(msg.value == 1 ether, "Please pay exactly one ether");  	//changed msg.sender to msg.value
 	//participantsMain[MainParticipantCount]=msg.sender;
 	participantsMain.push(msg.sender);
 	MainParticipantCount++;
@@ -35,24 +37,41 @@ contract Lottery {
 	    participantsMain = new address[](0);
     }    
     
-    function getPlayers() public view returns(address[]) {
+    function GuessingLottoEntry(uint guess) public payable {
+        require(msg.value == 1 ether, "Please pay exactly one ether");
+        GuessingLottoFunds+=1;
+        if (guess==GuessingLottoTarget) {
+            msg.sender.transfer(GuessingLottoFunds);
+            GuessingLottoFunds=0;
+        }
+        UpdateGuessingLottoTarget();
+    }
+    
+    function UpdateGuessingLottoTarget() private {
+        GuessingLottoTarget=random() % 10;
+    }
+
+    function getMainLottoPlayers() public view returns(address[]) {
         return participantsMain;
     } 
 
-    function getFunds() public view returns(uint){
+    function getMainLottoFunds() public view returns(uint){
         return MainLottoFunds;
+    } 
+    
+    function getGuessingLottoFunds() public view returns(uint){
+        return GuessingLottoFunds;
     } 
     
     function () public payable {
         // default blank function
     }
     
-} // end of contract
-
-contract Destructible is Lottery {
     function destroy() public  {
         if (msg.sender == lotteryManager) selfdestruct(lotteryManager);
     }
-}
+} // end of contract
+
+
 
 /// Styled according to Style Guide v0.5.13 
