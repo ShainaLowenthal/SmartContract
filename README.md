@@ -10,7 +10,8 @@
 * Benjamin Pulatov - benjamin.pulatov@protonmail.com
 * Anton Goretsky - anton.goretsky97@myhunter.cuny.edu
 
-
+### NOTE: Member Contributions
+All members worked in conjunction with each other during Zoom calls, and on their own time. The commit history is not representative of the work distribution on this project. All members participated fairly and equally in the project.
 
 ## Purpose of Contract
 General Purpose: Build multiple lottery games with varying difficulties and risk. Ex: standard lottery, guessing game.
