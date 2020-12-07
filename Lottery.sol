@@ -27,6 +27,7 @@ contract Lottery {
         lotteryManager=msg.sender;
     	MainLottoFunds=0;
     	UpdateGuessingLottoTarget();
+	UpdateRandomRRouletteLottoTarget();
     }
     
     function random() private view returns(uint) {
