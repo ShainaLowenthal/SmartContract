@@ -3,7 +3,7 @@ pragma solidity ^0.4.18;
 contract Lottery {
 	 
     uint MainLottoFunds; 		// funds up for grabs in main lotto
-    uint GuessingLottoFunds;
+    uint GuessingLottoFunds;  //funds for the guessing lotto
     uint WeightedLottoFunds; //funds up for grabs in weighted lotto
     uint RRouletteLottoFunds; ///funds up for grabs in russian roulette lotto
     uint RandomRRouletteLottoFunds; //funds up for grabs in the random russian roulette
@@ -30,7 +30,9 @@ contract Lottery {
     	UpdateRRouletteLottoTarget();
     	UpdateRandomRRouletteLottoTarget();
     }
-    
+      function getOwner() public view returns (address) {
+        return lotteryManager;
+    } 
     function random() private view returns(uint) {
         return uint(keccak256(abi.encodePacked(block.difficulty, now, participantsMain)));
     }

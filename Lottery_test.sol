@@ -1,8 +1,8 @@
 pragma solidity >=0.4.22 <0.8.0;
 import "remix_tests.sol"; // this import is automatically injected by Remix.
 //import "remix_accounts.sol";
-import "../github/ShainaLowenthal/SmartContract/Lottery.sol";
-
+//import "../github/ShainaLowenthal/SmartContract/Lottery.sol";
+import "../LotteryGames.sol";
 // File name has to end with '_test.sol', this file can contain more than one testSuite contracts
 contract LottoTest {
 
@@ -12,13 +12,24 @@ contract LottoTest {
     address[] participants;
    
     Lottery lotteryToTest;
-
+    
     function beforeAll() public {
         lotteryToTest = new Lottery();
         participants = lotteryToTest.getMainLottoPlayers();
+        
     }
-
     
+    function checkFundsSent() public
+    {
+        //check if they were removed from the contract balance
+        
+        
+       // address(this).balance;
+    }
+     function testOwner() public
+     {
+         Assert.equal(lotteryToTest.getOwner(), this,"owner is sender");
+     }
     function checkSenderAndValue() public payable {
         // checks that the sender isn't invalid
         for (uint i = 0; i < participants.length; i++)
