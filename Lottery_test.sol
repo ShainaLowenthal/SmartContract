@@ -12,18 +12,26 @@ contract LottoTest {
     address[] participants;
    
     Lottery lotteryToTest;
+
+    address owner;
+
+    uint x;
+
+    uint y;
     
     function beforeAll() public {
         lotteryToTest = new Lottery();
         participants = lotteryToTest.getMainLottoPlayers();
-        
+        owner = lotteryToTest.getOwner();
+        x = 1;
+        y = 1;
     }
     
  
-     function testOwner() public
+     function checkOwner() public
      {
-         //Assert.equal(lotteryToTest.getOwner(), this,"owner is sender");
-         Assert.equal(lotteryToTest.getOwner(), owner,"owner is sender");
+        // check that the owner isn't a random person so that the lottery can't be opened or closed by anyone other than the owner
+        Assert.equal(lotteryToTest.getOwner(), owner, "owner is sender");
      }
     function checkSenderAndValue() public payable {
         // checks that the sender isn't invalid
@@ -36,17 +44,17 @@ contract LottoTest {
     }
  
     
-    function checkFundsAndPlayersGreaterThanZero() public {
+    function checkFundsAndPlayersGreaterThanZeroMainLotto() public {
         while (lotteryToTest.getMainLottoFunds() > 0)
         {
-            uint x = lotteryToTest.getMainLottoFunds();
+            x = lotteryToTest.getMainLottoFunds();
             
             
         }
         
         while (participants.length > 0)
         {
-            uint y = participants.length;
+            y = participants.length;
             Assert.equal(lotteryToTest.getMainLottoFunds(), y*1000000000000000000, "check if correct funds");
             
         }
