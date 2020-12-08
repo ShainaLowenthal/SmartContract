@@ -19,13 +19,7 @@ contract LottoTest {
         
     }
     
-    function checkFundsSent() public
-    {
-        //check if they were removed from the contract balance
-        
-        
-       // address(this).balance;
-    }
+ 
      function testOwner() public
      {
          //Assert.equal(lotteryToTest.getOwner(), this,"owner is sender");
