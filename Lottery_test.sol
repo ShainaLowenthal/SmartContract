@@ -28,7 +28,8 @@ contract LottoTest {
     }
      function testOwner() public
      {
-         Assert.equal(lotteryToTest.getOwner(), this,"owner is sender");
+         //Assert.equal(lotteryToTest.getOwner(), this,"owner is sender");
+         Assert.equal(lotteryToTest.getOwner(), owner,"owner is sender");
      }
     function checkSenderAndValue() public payable {
         // checks that the sender isn't invalid
