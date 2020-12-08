@@ -27,17 +27,18 @@ contract Lottery {
 
     constructor() public {
         lotteryManager=msg.sender; //set the owner to the contract creator
-    	MainLottoFunds=0; //no funds at first in Main Lotto
-	GuessingLottoFunds=0; //no funds at first in Guessing Lotto
-	WeightedLottoFunds=0; //no funds at first in Weighted Lotto
-	RRouletteLottoFunds=0; //no funds at first in Russian Roulette Lotto
-	RandomRRouletteLottoFunds=0; //no funds at first in Randomized Russian Roulette Lotto
-    	UpdateGuessingLottoTarget(); //create initial target for Guessing lotto
-    	UpdateRRouletteLottoTarget(); //create initial target for Russian Roulette Lotto
-    	UpdateRandomRRouletteLottoTarget(); //create initial target for Randomized Russian Roulette Lotto
-	GuessingLottoDifficulty = 10;
-	RRouletteLottoDifficulty = 10;
-	RandomRRouletteLottoDifficulty=10;
+        MainLottoFunds=0; //no funds at first in Main Lotto
+	    GuessingLottoFunds=0; //no funds at first in Guessing Lotto
+	    WeightedLottoFunds=0; //no funds at first in Weighted Lotto
+	    RRouletteLottoFunds=0; //no funds at first in Russian Roulette Lotto
+	    RandomRRouletteLottoFunds=0; //no funds at first in Randomized Russian Roulette Lotto
+	    GuessingLottoDifficulty = 10;
+	    RRouletteLottoDifficulty = 10;
+	    RandomRRouletteLottoDifficulty=10;
+	    UpdateGuessingLottoTarget(); //create initial target for Guessing lotto
+	    UpdateRRouletteLottoTarget(); //create initial target for Russian Roulette Lotto
+        UpdateRandomRRouletteLottoTarget(); //create initial target for Randomized Russian Roulette Lotto
+
     }
     
       function getOwner() public view returns (address) { //check who the owner is
@@ -81,13 +82,13 @@ contract Lottery {
         UpdateGuessingLottoTarget(); //Choose new target every guess to avoid process of elimination
     }
 
-     function UpdateGuessingLottoTarget() private { //Choose new guessing target
-        GuessingLottoTarget=random() % GuessingLottoDifficulty; //Restricted to number between 0-9
+    function UpdateGuessingLottoTarget() private { //Choose new guessing target
+        GuessingLottoTarget=random() % GuessingLottoDifficulty; //Range based on difficulty
     }
     
     function UpdateGuessingLottoDifficulty(uint new_difficulty) public { //Update difficulty for Guessing Lotto
         require(msg.sender == lotteryManager); //Can only be updated by owner of contract
-	GuessingLottoDifficulty=new_difficulty;
+	    GuessingLottoDifficulty=new_difficulty;
     } 
     
     function getGuessingLottoFunds() public view returns(uint){ //See how much eth is up for grabs in the Guessing Lotto
@@ -124,7 +125,7 @@ contract Lottery {
         }
         WeightedLottoFunds=0; //Reset the pot
         delete participantsWeighted; //Reset the participants
-	participantsWeighted = new address[](0);
+	    participantsWeighted = new address[](0);
     }    
 
     function getWeightedLottoPlayers() public view returns(address[]) { //Check who's participating in the Weighted Lotto
@@ -168,7 +169,7 @@ contract Lottery {
 
     function UpdateRRouletteLottoDifficulty(uint new_difficulty) public { //Update difficulty for Russian Roulette
         require(msg.sender == lotteryManager); //Can only be updated by owner of contract
-	RRouletteLottoDifficulty=new_difficulty;
+	    RRouletteLottoDifficulty=new_difficulty;
     } 
     
     function getRRouletteLottoFunds() public view returns(uint) { //See how much is up for grabs in the Russian Roulette lotto
@@ -202,7 +203,7 @@ contract Lottery {
 
     function UpdateRandomRRouletteLottoDifficulty(uint new_difficulty) public { //Update difficulty for Randomized Russian Roulette
         require(msg.sender == lotteryManager); //Can only be updated by owner of contract
-	RandomRRouletteLottoDifficulty=new_difficulty;
+	    RandomRRouletteLottoDifficulty=new_difficulty;
     } 
     
     function getRandomRRouletteLottoFunds() public view returns(uint) { //See how much is up for grabs in Randomized Russian Roulette Lotto
