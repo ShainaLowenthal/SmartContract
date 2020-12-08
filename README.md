@@ -17,8 +17,8 @@ All members worked in conjunction with each other during Zoom calls, using the G
  1. Main Lotto-send 1 ether and submit a MainLottoEntry. When the lottery manager ends the lottory, a random address will be chosen from the pool and the main lotto funds will be transfered to their account. 
  2. Guessing Lotto-send 1 ether and a guess of type uint and submit to GuessingLottoEntry. If your guess is correct, the guessing lotto funds will be transfered to your account. If not, you can submit another guess however you should note that the target will change after each guess is submitted. 
  3. Weighted Lotto-send however many ether you want to WeightedLottoEntry. When the lottery manager ends the lottery, a random address will be chosen from the pool and the weighted lotto funds will be transfered to their account.
- 4. Russian Roulette - send 1 ether and submit a RRouletteEntry
- 5. Random Russian Roulette - send 1 ether and submit a RandomRRouletteEntry
+ 4. Russian Roulette - send 1 ether and a guess of type uint and submit to RRouletteLottoEntry. If your guess is correct, the Russian Roulette lotto funds will be transfered to your account. If not, whether you can submit another guess depends on how close you were to the target. Being off by more than 2 will get you blacklisted until the next round. The target will change after each guess is submitted. 
+ 5. Random Russian Roulette - send 1 ether and a guess of type uint and submit to RRouletteLottoEntry. If your guess is correct, the Russian Roulette lotto funds will be transfered to your account. If not, whether you can submit another guess depends on chance (1/6 chance to try again, 5/6 chance you are blacklisted till next round). The target will change after each guess is submitted. 
 ## Purpose of Contract
 General Purpose: Build multiple lottery games with varying difficulties and risk. Ex: standard lottery, guessing game.
  
