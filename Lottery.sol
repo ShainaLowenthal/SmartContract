@@ -2,12 +2,12 @@ pragma solidity ^0.4.18;
 
 contract Lottery {
      
-    uint MainLottoFunds;        // funds up for grabs in main lotto
-    uint GuessingLottoFunds;
-    uint GuessingLottoTarget;       // current guessing target in guessing lotto
-    address[] participantsMain;     // this holds all participant addresses in the main lotto
-    uint256 MainParticipantCount;   // this keeps count of the number of main lotto participants
-    address public lotteryManager;      // this is the person in charge of the lottery
+     uint MainLottoFunds;        // funds up for grabs in main lotto
+     uint GuessingLottoFunds;
+     uint GuessingLottoTarget;       // current guessing target in guessing lotto
+     uint256 MainParticipantCount;   // this keeps count of the number of main lotto participants
+     address[] participantsMain;     // this holds all participant addresses in the main lotto
+     address public lotteryManager;      // this is the person in charge of the lottery
 
     constructor() public {
         lotteryManager=msg.sender;
