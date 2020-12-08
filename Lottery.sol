@@ -16,8 +16,8 @@ contract Lottery {
     }
      
     function MainLottoEntry() public payable {
-    require(msg.value == 1 ether, "Please pay exactly one ether");      //changed msg.sender to msg.value
-    //participantsMain[MainParticipantCount]=msg.sender;
+        require(msg.value == 1 ether, "Please pay exactly one ether");      //changed msg.sender to msg.value
+        //participantsMain[MainParticipantCount]=msg.sender;
         participantsMain.push(msg.sender);
         MainParticipantCount++;
         MainLottoFunds+=1;
