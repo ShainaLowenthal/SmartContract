@@ -7,7 +7,7 @@
 * Shaina Lowenthal - shaina.lowenthal96@myhunter.cuny.edu
 * Chloe Gottlieb - crbgott@gmail.com
 * Alex Shmarkatyuk - matroskind@gmail.com
-* Benjamin Pulatov - benjamin.pulatov@protonmail.com
+* Benjamin Pulatov (Username: Zodigram) - benjamin.pulatov@protonmail.com
 * Anton Goretsky - anton.goretsky97@myhunter.cuny.edu
 
 ### NOTE: Member Contributions
