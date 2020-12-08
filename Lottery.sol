@@ -3,25 +3,22 @@ pragma solidity ^0.4.18;
 contract Lottery {
 	 
     uint MainLottoFunds; 		// funds up for grabs in main lotto
-    uint GuessingLottoFunds;  //funds for the guessing lotto
-    uint WeightedLottoFunds; //funds up for grabs in weighted lotto
-    uint RRouletteLottoFunds; ///funds up for grabs in russian roulette lotto
-    uint RandomRRouletteLottoFunds; //funds up for grabs in the random russian roulette
-    
+    uint GuessingLottoFunds;  		// funds for the guessing lotto
+    uint WeightedLottoFunds; 		// funds up for grabs in weighted lotto
+    uint RRouletteLottoFunds; 		// funds up for grabs in russian roulette lotto
+    uint RandomRRouletteLottoFunds; 	// funds up for grabs in the random russian roulette
     uint GuessingLottoTarget; 		// current guessing target in guessing lotto
-    uint RRouletteLottoTarget; //current guessing target in russian roulette
-   uint RandomRRouletteLottoTarget; //current guessing target in russian roulette with random elimination
+    uint RRouletteLottoTarget; 		// current guessing target in russian roulette
+    uint RandomRRouletteLottoTarget; 	// current guessing target in russian roulette with random elimination
 
     address[] participantsMain;  	// this holds all participant addresses in the main lotto
     address[] participantsWeighted;  	// this holds all participant addresses in the main lotto
-    mapping(address => uint) public weights;  /// This stores each participants betting weight
-    address[] EliminatedParticipantsRRoulette;  ///This holds a list of all participants barred from the Russian roulette lotto
+    mapping(address => uint) public weights;  	// This stores each participants betting weight
+    address[] EliminatedParticipantsRRoulette;  //This holds a list of all participants barred from the Russian roulette lotto
     mapping(address => int) public EliminatedStatus; //This tracks whether a participant is banned from the russian roulette lotto or not. By default, each address is mapped to 0, which is acceptable. When an address guesses too poorly, it is switched to -1.
-    address[] EliminatedParticipantsRandomRRoulette; ///This holds a list of all participants barred from the Russian roulette lotto
+    address[] EliminatedParticipantsRandomRRoulette; //This holds a list of all participants barred from the Russian roulette lotto
     mapping(address => uint) public RandomEliminatedStatus; //This tracks whether a participant is banned from the russian roulette lotto or not. By default, each address is mapped to 0, which is acceptable. When an address guesses too poorly, it is switched to -1.
-
-
-    address public lotteryManager;      // this is the person in charge of the lottery
+    address public lotteryManager;     			    // this is the person in charge of the lottery
 
     constructor() public {
         lotteryManager=msg.sender;
@@ -30,25 +27,27 @@ contract Lottery {
     	UpdateRRouletteLottoTarget();
     	UpdateRandomRRouletteLottoTarget();
     }
+    
       function getOwner() public view returns (address) {
         return lotteryManager;
     } 
+    
     function random() private view returns(uint) {
         return uint(keccak256(abi.encodePacked(block.difficulty, now, participantsMain)));
     }
      
     function MainLottoEntry() public payable {
-	require(msg.value == 1 ether, "Please pay exactly one ether");  	//changed msg.sender to msg.value
+	require(msg.value == 1 ether, "Please pay exactly one ether");	//changed msg.sender to msg.value
 	participantsMain.push(msg.sender);
 	MainLottoFunds+=1000000000000000000;
     }
     
     function MainLottoEnd() public payable {
         require(msg.sender == lotteryManager);
-	    uint winning_index = random() % participantsMain.length; 			    //randomly generate winner
-	    participantsMain[winning_index].transfer(MainLottoFunds); // send funds to winner
-	    MainLottoFunds=0; 								    // reset fund counter
-	    delete participantsMain; 							    // reset participant address array
+	    uint winning_index = random() % participantsMain.length; 	//randomly generate winner
+	    participantsMain[winning_index].transfer(MainLottoFunds); 	// send funds to winner
+	    MainLottoFunds=0; 						// reset fund counter
+	    delete participantsMain; 					// reset participant address array
 	    participantsMain = new address[](0);
     }    
     
@@ -56,8 +55,7 @@ contract Lottery {
         return participantsMain;
     } 
 
-
-    function getMainLottoFunds() public view returns(uint){
+    function getMainLottoFunds() public view returns(uint) {
         return MainLottoFunds;
     } 
     
@@ -86,7 +84,7 @@ contract Lottery {
         WeightedLottoFunds+=msg.value;
     }
     
-    function WeightedLottoEnd() public{
+    function WeightedLottoEnd() public {
         require(msg.sender == lotteryManager);
         uint winning_weight = random() % (WeightedLottoFunds / 1000000000000000000);
         uint current_tally=(weights[participantsWeighted[0]] / 1000000000000000000);
@@ -114,15 +112,13 @@ contract Lottery {
         return participantsWeighted;
     } 
     
-    function getWeightedLottoFunds() public view returns(uint){
+    function getWeightedLottoFunds() public view returns(uint) {
         return WeightedLottoFunds / 1000000000000000000;
     } 
-    
     
     function RRouletteEntry(uint guess) public payable {
         require(msg.value == 1 ether, "Please pay exactly one ether");
         require(EliminatedStatus[msg.sender]!=1, "Please wait until you may enter again");
-
         RRouletteLottoFunds+=msg.value;
         int target_int=int(RRouletteLottoTarget);
         int guess_int=int(guess);
@@ -151,8 +147,7 @@ contract Lottery {
         RRouletteLottoTarget=random() % 12;
     }
 
-
-    function getRRouletteLottoFunds() public view returns(uint){
+    function getRRouletteLottoFunds() public view returns(uint) {
         return RRouletteLottoFunds;
     } 
     
@@ -181,10 +176,10 @@ contract Lottery {
         RandomRRouletteLottoTarget=random() % 3;
     }
 
-
-    function getRandomRRouletteLottoFunds() public view returns(uint){
+    function getRandomRRouletteLottoFunds() public view returns(uint) {
         return RandomRRouletteLottoFunds;
     } 
+    
     function () public payable {
         // default blank function
     }
@@ -192,8 +187,8 @@ contract Lottery {
     function destroy() public  {
         if (msg.sender == lotteryManager) selfdestruct(lotteryManager);
     }
+    
 } // end of contract
-
 
 
 /// Styled according to Style Guide v0.5.13 
