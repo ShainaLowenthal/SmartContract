@@ -29,7 +29,7 @@ All members worked in conjunction with each other during Zoom calls, using the G
  
 ### Choices Made
  * 1 ether is the required amount of entry to all lottos except the *Weighted Lotto*. This is a high stakes lottery. Games and prices were set out of creative interest for high-rollers, not the average user of Ethereum. There is inherent high risk and loss involved in entry to all lotteries.
- * The first user to enter a lottery functions as the *lotteryManager*. This user must be the one to end all lotteries, except for the *Guessing Lotto*. 
+ * The one who deploys the lottery functinos as the *lotteryManager*. This user must be the one to end all lotteries, except for the *Guessing Lotto*, as that one ends only based on the guess.
  
 ## Purpose of Contract (Original Entry from Part 1 Proposal)
 General Purpose: Build multiple lottery games with varying difficulties and risk. Ex: standard lottery, guessing game.
