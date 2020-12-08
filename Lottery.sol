@@ -85,7 +85,7 @@ contract Lottery {
         GuessingLottoTarget=random() % GuessingLottoDifficulty; //Restricted to number between 0-9
     }
     
-    function UpdateRandomRRouletteLottoDifficulty(uint new_difficulty) public { //Update difficulty for Guessing Lotto
+    function UpdateGuessingLottoDifficulty(uint new_difficulty) public { //Update difficulty for Guessing Lotto
         require(msg.sender == lotteryManager); //Can only be updated by owner of contract
 	GuessingLottoDifficulty=new_difficulty;
     } 
@@ -95,7 +95,7 @@ contract Lottery {
     } 
     
     function WeightedLottoEntry() public payable { //Pay however much you want to enter the Weighted lotto
-    	require(msg.value % 1000000000000000000 = 0, "Please only pay in exact eth"); //Pay exclusively in eth, not wei
+    	require(msg.value % 1000000000000000000 == 0, "Please only pay in exact eth"); //Pay exclusively in eth, not wei
         weights[msg.sender]=msg.value; //Your address is mapped to how much you paid to enter
         participantsWeighted.push(msg.sender); //You are recorded as a participant
         WeightedLottoFunds+=msg.value; //The money you paid is added to the pot
@@ -131,7 +131,7 @@ contract Lottery {
         return participantsWeighted;
     } 
     
-    function getWeightedLottoFunds() public view returns(uint) { See how much eth is up for grabs in the Weighted Lotto
+    function getWeightedLottoFunds() public view returns(uint) { //See how much eth is up for grabs in the Weighted Lotto
         return WeightedLottoFunds;
     } 
     
@@ -145,7 +145,7 @@ contract Lottery {
         if (distance_int < 0) {
             distance_int = 0 - distance_int;
         }
-        distance_int = distance_int % RRouletteLottoDifficulty; //Distance between guess and Russian Roulette Target
+        distance_int = distance_int % int(RRouletteLottoDifficulty); //Distance between guess and Russian Roulette Target
         if (guess==RRouletteLottoTarget) { //Check if user guessed correctly
             msg.sender.transfer(RRouletteLottoFunds); //If so, give them the pot
             RRouletteLottoFunds=0; //Reset the pot
@@ -162,7 +162,7 @@ contract Lottery {
         UpdateRRouletteLottoTarget(); //Choose new target every guess to avoid process of elimination
     }
     
-    function UpdateRRouletteLottoTarget() private { Choose new target for the Russian Roulette lotto
+    function UpdateRRouletteLottoTarget() private { //Choose new target for the Russian Roulette lotto
         RRouletteLottoTarget=random() % RRouletteLottoDifficulty;
     }
 
@@ -189,14 +189,14 @@ contract Lottery {
             delete EliminatedParticipantsRandomRRoulette;
 	        EliminatedParticipantsRandomRRoulette = new address[](0);
         }
-        else if (random() % 6 != 1) { 1/6 chance you can try again
+        else if (random() % 6 != 1) { //1/6 chance you can try again
             EliminatedParticipantsRandomRRoulette.push(msg.sender); //if you fail, you're blacklisted
             RandomEliminatedStatus[msg.sender]=1;
         }
         UpdateRandomRRouletteLottoTarget(); //Choose new target every guess to avoid process of elimination
     }
     
-    function UpdateRandomRRouletteLottoTarget() private { Choose new Randomized Russian Roulette number
+    function UpdateRandomRRouletteLottoTarget() private { //Choose new Randomized Russian Roulette number
         RandomRRouletteLottoTarget=random() % RandomRRouletteLottoDifficulty; //Target based on Difficulty
     }
 
