@@ -28,7 +28,7 @@ All members worked in conjunction with each other during Zoom calls, using the G
  5. **Random Russian Roulette** - Send 1 ether and a guess of type uint and submit to *RRouletteLottoEntry*. If your guess is correct, the Russian Roulette lotto funds will be transfered to your account. If not, whether you can submit another guess depends on chance (1/6 chance to try again, 5/6 chance you are blacklisted until next round). The target will change after each guess is submitted. **The lotto will remain active until the correct guess is made, there is no manual end.**
  
 ### Choices Made
- * 1 ether is the required amount of entry to all lottos except the *Weighted Lotto*. This is a high stakes lottery. Games and prices were set out of creative interest for high-rollers, not the average user of Ethereum. There is inherent high risk and loss involved in entry to all lotteries.
+ * 1 ether is the required amount of entry to all lottos except the *Weighted Lotto*. This is a high stakes lottery. Games and prices were set out of creative interest for high-rollers, not the average user of Ethereum. There is inherent high risk and loss involved in entry to all lotteries. **Pony up!**
  * The one who deploys the lottery functinos as the *lotteryManager*. This user must be the one to end all lotteries, except for the *Guessing Lotto*, as that one ends only based on the guess.
  
 ## Purpose of Contract (Original Entry from Part 1 Proposal and Updated Version)
