@@ -13,13 +13,25 @@
 ### NOTE: Member Contributions
 All members worked in conjunction with each other during Zoom calls, using the Github account of whoever was on hand, and on their own time. The commit history is **not** representative of the work distribution on this project. **All members participated fairly and equally in the project.**
 
-## Rules for each lottery game:
- 1. Main Lotto-send 1 ether and submit a MainLottoEntry. When the lottery manager ends the lottory, a random address will be chosen from the pool and the main lotto funds will be transfered to their account. 
- 2. Guessing Lotto-send 1 ether and a guess of type uint and submit to GuessingLottoEntry. If your guess is correct, the guessing lotto funds will be transfered to your account. If not, you can submit another guess however you should note that the target will change after each guess is submitted. 
- 3. Weighted Lotto-send however many ether you want to WeightedLottoEntry. When the lottery manager ends the lottery, a random address will be chosen from the pool and the weighted lotto funds will be transfered to their account.
- 4. Russian Roulette - send 1 ether and a guess of type uint and submit to RRouletteLottoEntry. If your guess is correct, the Russian Roulette lotto funds will be transfered to your account. If not, whether you can submit another guess depends on how close you were to the target. Being off by more than 2 will get you blacklisted until the next round. The target will change after each guess is submitted. 
- 5. Random Russian Roulette - send 1 ether and a guess of type uint and submit to RRouletteLottoEntry. If your guess is correct, the Russian Roulette lotto funds will be transfered to your account. If not, whether you can submit another guess depends on chance (1/6 chance to try again, 5/6 chance you are blacklisted till next round). The target will change after each guess is submitted. 
-## Purpose of Contract
+## List of Lottery Games
+ 1. Main Lotto
+ 2. Guessing Lotto
+ 3. Weighted Lotto
+ 4. Russian Roulette
+ 5. Random Russian Roulette
+
+## Game Summaries:
+ 1. **Main Lotto** - Send 1 ether and submit a *MainLottoEntry*. When the lottery manager ends the lottory, a random address will be chosen from the pool and the main lotto funds will be transfered to their account. **End the lottery by calling *MainLottoEnd*.**
+ 2. **Guessing Lotto** - Send 1 ether and a guess of type uint and submit to *GuessingLottoEntry*. If your guess is correct, the guessing lotto funds will be transfered to your account. If not, you can submit another guess however you should note that the target will change after each guess is submitted. **The lotto will remain active until the correct guess is made, there is no manual end.**
+ 3. **Weighted Lotto** - Send however many ether you want to *WeightedLottoEntry*. When the lottery manager ends the lottery, a random address will be chosen from the pool and the weighted lotto funds will be transfered to their account. **End the lottery by calling *WeightedLottoEnd*.**
+ 4. **Russian Roulette** - Send 1 ether and a guess of type uint and submit to *RRouletteLottoEntry*. If your guess is correct, the Russian Roulette lotto funds will be transfered to your account. If not, whether you can submit another guess depends on how close you were to the target. Being off by more than 2 will get you blacklisted until the next round. The target will change after each guess is submitted. **The lotto will remain active until the correct guess is made, there is no manual end.**
+ 5. **Random Russian Roulette** - Send 1 ether and a guess of type uint and submit to *RRouletteLottoEntry*. If your guess is correct, the Russian Roulette lotto funds will be transfered to your account. If not, whether you can submit another guess depends on chance (1/6 chance to try again, 5/6 chance you are blacklisted till next round). The target will change after each guess is submitted. **The lotto will remain active until the correct guess is made, there is no manual end.**
+ 
+### Choices Made
+ * 1 ether is the required amount of entry to all lottos except the *Weighted Lotto*. This is a high stakes lottery. Games and prices were set out of creative interest for high-rollers, not the average user of Ethereum. There is inherent high risk and loss involved in entry to all lotteries.
+ * The first user to enter a lottery functions as the *lotteryManager*. This user must be the one to end all lotteries, except for the *Guessing Lotto*. 
+ 
+## Purpose of Contract (Original Entry from Part 1 Proposal)
 General Purpose: Build multiple lottery games with varying difficulties and risk. Ex: standard lottery, guessing game.
  
 Initial Concept:
