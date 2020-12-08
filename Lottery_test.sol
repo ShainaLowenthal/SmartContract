@@ -53,6 +53,7 @@ contract LottoTest {
         while (participants.length > 0)
         {
             uint y = participants.length;
+            Assert.equal(lotteryToTest.getMainLottoFunds(), y*1000000000000000000, "check if correct funds");
             
         }
         Assert.equal(lotteryToTest.getMainLottoFunds(), x, "No lottery if no funds");
