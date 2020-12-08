@@ -14,10 +14,6 @@ contract Lottery {
         MainLottoFunds=0;
         UpdateGuessingLottoTarget();
     }
-    
-    function random() private view returns(uint) {
-        return uint(keccak256(abi.encodePacked(block.difficulty, now, participantsMain)));
-    }
      
     function MainLottoEntry() public payable {
     require(msg.value == 1 ether, "Please pay exactly one ether");      //changed msg.sender to msg.value
@@ -47,10 +43,6 @@ contract Lottery {
         }
         UpdateGuessingLottoTarget();
     }
-    
-    function UpdateGuessingLottoTarget() private {
-        GuessingLottoTarget=random() % 10;
-    }
 
     function getMainLottoPlayers() public view returns(address[]) {
         return participantsMain;
@@ -71,6 +63,15 @@ contract Lottery {
     function destroy() public  {
         if (msg.sender == lotteryManager) selfdestruct(lotteryManager);
     }
+    
+    function random() private view returns(uint) {
+        return uint(keccak256(abi.encodePacked(block.difficulty, now, participantsMain)));
+    }
+        
+    function UpdateGuessingLottoTarget() private {
+        GuessingLottoTarget=random() % 10;
+    }
+    
 } // end of contract
 
 
