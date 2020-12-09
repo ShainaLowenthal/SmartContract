@@ -34,7 +34,7 @@ All members worked in conjunction with each other during Zoom calls, using the G
 ## Purpose of Contract (Original Entry from Part 1 Proposal And our Revised Plan)
 General Purpose: Build multiple lottery games with varying difficulties and risk. Ex: standard lottery, guessing game.
  
-Initial Concept:
+**Initial Concept:**
 
 The purpose of this contract is to host multiple lottery “games” with varying difficulties and risk. We will begin with a simple lottery, in which a user sends ether (a fixed amount), and a winner will be declared each week, winning the entire pot.
  
@@ -46,7 +46,7 @@ A further variation of the above concept is “Russian Roulette,” in which if 
  
 Another version of “Russian Roulette” exists without a user needing to enter a guess, rather a certain number of random users will be eliminated before the lottery concludes and a winner is chosen. This could be accomplished by either randomly eliminating X users just before the random winner is selected or by eliminating a participant based on their ticket number. For example, tickets 76 and 138 cannot win the lottery. These ticket numbers can reset every round.
 
-Revised Concept:
+**Revised Concept:**
 
 Implement the following in Solidity:
 
