@@ -212,7 +212,7 @@ contract Lottery {
     
 
     
-    function () public payable {
+    function () public payable { //fallback function
         msg.sender.transfer(msg.value);
     }
     
