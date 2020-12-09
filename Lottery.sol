@@ -12,50 +12,54 @@ contract Lottery {
     uint RRouletteLottoTarget; 		// current guessing target in russian roulette
     uint RandomRRouletteLottoTarget; 	// current guessing target in russian roulette with random elimination
     
-    uint GuessingLottoDifficulty; 	//current guessing difficulty for Guessing Lotto
-    uint RRouletteLottoDifficulty;	//current guessing difficulty for Russian Roulette Lotto
-    uint RandomRRouletteLottoDifficulty; //current guessing difficulty for Randomized Russian Roulette Lotto
+    uint GuessingLottoDifficulty; 	// current guessing difficulty for Guessing Lotto
+    uint RRouletteLottoDifficulty;	// current guessing difficulty for Russian Roulette Lotto
+    uint RandomRRouletteLottoDifficulty; // current guessing difficulty for Randomized Russian Roulette Lotto
 
-    address[] participantsMain;  	// this holds all participant addresses in the main lotto
-    address[] participantsWeighted;  	// this holds all participant addresses in the weighted lotto
+    address[] participantsMain;  	// This holds all participant addresses in the main lotto
+    address[] participantsWeighted;  	// This holds all participant addresses in the weighted lotto
     mapping(address => uint) public weights;  	// This stores each participants betting weight in the weighted lotto
-    address[] EliminatedParticipantsRRoulette;  //This holds a list of all participants barred from the Russian roulette lotto
-    mapping(address => int) public EliminatedStatus; //This tracks whether a participant is banned from the russian roulette lotto or not. By default, each address is mapped to 0, which is acceptable. When an address guesses too poorly, it is switched to -1.
-    address[] EliminatedParticipantsRandomRRoulette; //This holds a list of all participants barred from the randomized Russian roulette lotto
-    mapping(address => uint) public RandomEliminatedStatus; //This tracks whether a participant is banned from the randomized russian roulette lotto or not. By default, each address is mapped to 0, which is acceptable. When an address guesses too poorly, it is switched to -1.
-    address public lotteryManager;     			    // this is the person in charge of the lottery
+    address[] EliminatedParticipantsRRoulette;  // This holds a list of all participants barred from the Russian roulette lotto
+    mapping(address => int) public EliminatedStatus; // This tracks whether a participant is banned from the russian roulette lotto or not. By default, each address is mapped to 0, which is acceptable. When an address guesses too poorly, it is switched to -1.
+    address[] EliminatedParticipantsRandomRRoulette; // This holds a list of all participants barred from the randomized Russian roulette lotto
+    mapping(address => uint) public RandomEliminatedStatus; // This tracks whether a participant is banned from the randomized russian roulette lotto or not. By default, each address is mapped to 0, which is acceptable. When an address guesses too poorly, it is switched to -1.
+    address public lotteryManager;     			    // This is the person in charge of the lottery
 
     constructor() public {
-        lotteryManager=msg.sender; //set the owner to the contract creator
-        MainLottoFunds=0; //no funds at first in Main Lotto
-	    GuessingLottoFunds=0; //no funds at first in Guessing Lotto
-	    WeightedLottoFunds=0; //no funds at first in Weighted Lotto
-	    RRouletteLottoFunds=0; //no funds at first in Russian Roulette Lotto
-	    RandomRRouletteLottoFunds=0; //no funds at first in Randomized Russian Roulette Lotto
-	    GuessingLottoDifficulty = 10;
-	    RRouletteLottoDifficulty = 10;
-	    RandomRRouletteLottoDifficulty=10;
-	    UpdateGuessingLottoTarget(); //create initial target for Guessing lotto
-	    UpdateRRouletteLottoTarget(); //create initial target for Russian Roulette Lotto
-        UpdateRandomRRouletteLottoTarget(); //create initial target for Randomized Russian Roulette Lotto
+	lotteryManager=msg.sender; // set the owner to the contract creator
+	MainLottoFunds=0; // no funds at first in Main Lotto
+	GuessingLottoFunds=0; // no funds at first in Guessing Lotto
+	WeightedLottoFunds=0; // no funds at first in Weighted Lotto
+	RRouletteLottoFunds=0; // no funds at first in Russian Roulette Lotto
+	RandomRRouletteLottoFunds=0; // no funds at first in Randomized Russian Roulette Lotto
+	GuessingLottoDifficulty=10;
+	RRouletteLottoDifficulty=10;
+	RandomRRouletteLottoDifficulty=10;
+	UpdateGuessingLottoTarget(); // create initial target for Guessing lotto
+	UpdateRRouletteLottoTarget(); // create initial target for Russian Roulette Lotto
+        UpdateRandomRRouletteLottoTarget(); // create initial target for Randomized Russian Roulette Lotto
 
     }
     
-      function getOwner() public view returns (address) { //check who the owner is
-        return lotteryManager; 
+    // check who the owner is
+    function getOwner() public view returns (address) { 
+    	return lotteryManager; 
     } 
     
-    function random() private view returns(uint) { //generate "random" number
+    // generate "random" number
+    function random() private view returns(uint) { 
         return uint(keccak256(abi.encodePacked(block.difficulty, now, participantsMain)));
     }
-     
-    function MainLottoEntry() public payable { //Pay 1 eth to be added to pool of competitors
+    
+    // Pay 1 eth to be added to pool of competitors
+    function MainLottoEntry() public payable { 
 	require(msg.value == 1 ether, "Please pay exactly one ether");
 	participantsMain.push(msg.sender);
 	MainLottoFunds+=msg.value; //add 1 eth to pot
     }
     
-    function MainLottoEnd() public payable returns(uint) { //Pay out winner of Main Lotto
+    // Pay out winner of Main Lotto
+    function MainLottoEnd() public payable returns(uint) { 
         require(msg.sender == lotteryManager); //can only be executed by owner
 	    uint winning_index = random() % participantsMain.length; 	//randomly generate winner
 	    participantsMain[winning_index].transfer(MainLottoFunds); 	// send funds to winner
@@ -64,15 +68,18 @@ contract Lottery {
 	    participantsMain = new address[](0);
     }    
     
-    function getMainLottoPlayers() public view returns(address[]) { //See who is participating in the Main Lotto
+    // See who is participating in the Main Lotto
+    function getMainLottoPlayers() public view returns(address[]) { 
         return participantsMain;
     } 
-
-    function getMainLottoFunds() public view returns(uint) { //See how much eth is up for grabs in the Main Lotto
+    
+    // See how much eth is up for grabs in the Main Lotto
+    function getMainLottoFunds() public view returns(uint) { 
         return MainLottoFunds;
     } 
     
-    function GuessingLottoEntry(uint guess) public payable { //Pay one eth for chance to guess target and win pot
+    // Pay one eth for chance to guess target and win pot
+    function GuessingLottoEntry(uint guess) public payable { 
         require(msg.value == 1 ether, "Please pay exactly one ether"); 
         GuessingLottoFunds+=msg.value; //Add payment to Guessing Lotto pot
         if (guess==GuessingLottoTarget) { //Only when guess is exactly right
@@ -82,21 +89,25 @@ contract Lottery {
         UpdateGuessingLottoTarget(); //Choose new target every guess to avoid process of elimination
     }
 
-    function UpdateGuessingLottoTarget() private { //Choose new guessing target
+    // Choose new guessing target
+    function UpdateGuessingLottoTarget() private { 
         GuessingLottoTarget=random() % GuessingLottoDifficulty; //Range based on difficulty
     }
     
-    function UpdateGuessingLottoDifficulty(uint new_difficulty) public { //Update difficulty for Guessing Lotto
+    // Update difficulty for Guessing Lotto
+    function UpdateGuessingLottoDifficulty(uint new_difficulty) public { 
         require(msg.sender == lotteryManager); //Can only be updated by owner of contract
 	require(new_difficulty > 0,"The difficulty should be greater than 0");
 	    GuessingLottoDifficulty=new_difficulty;
     } 
     
-    function getGuessingLottoFunds() public view returns(uint){ //See how much eth is up for grabs in the Guessing Lotto
+    // See how much eth is up for grabs in the Guessing Lotto
+    function getGuessingLottoFunds() public view returns(uint){ 
         return GuessingLottoFunds; 
     } 
     
-    function WeightedLottoEntry() public payable { //Pay however much you want to enter the Weighted lotto
+    // Pay however much you want to enter the Weighted lotto
+    function WeightedLottoEntry() public payable { 
     	require(msg.value % 1000000000000000000 == 0, "Please only pay in exact eth"); //Pay exclusively in eth, not wei
         weights[msg.sender]=msg.value; //Your address is mapped to how much you paid to enter
         participantsWeighted.push(msg.sender); //You are recorded as a participant
@@ -127,17 +138,20 @@ contract Lottery {
         WeightedLottoFunds=0; //Reset the pot
         delete participantsWeighted; //Reset the participants
 	    participantsWeighted = new address[](0);
-    }    
-
-    function getWeightedLottoPlayers() public view returns(address[]) { //Check who's participating in the Weighted Lotto
+    }
+    
+    // Check who's participating in the Weighted Lotto
+    function getWeightedLottoPlayers() public view returns(address[]) { 
         return participantsWeighted;
     } 
     
-    function getWeightedLottoFunds() public view returns(uint) { //See how much eth is up for grabs in the Weighted Lotto
+    // See how much eth is up for grabs in the Weighted Lotto
+    function getWeightedLottoFunds() public view returns(uint) { 
         return WeightedLottoFunds;
     } 
     
-    function RRouletteEntry(uint guess) public payable { //Pay 1 eth to participate in the Russian Roulette Lotto
+    // Pay 1 eth to participate in the Russian Roulette Lotto    
+    function RRouletteEntry(uint guess) public payable { 
         require(msg.value == 1 ether, "Please pay exactly one ether");
         require(EliminatedStatus[msg.sender]!=1, "Please wait until you may enter again"); //Cannot participate again if eliminated in this round
         RRouletteLottoFunds+=msg.value; //Add funds to pot if amount paid is acceptable and participant not eliminated previously
@@ -164,21 +178,25 @@ contract Lottery {
         UpdateRRouletteLottoTarget(); //Choose new target every guess to avoid process of elimination
     }
     
-    function UpdateRRouletteLottoTarget() private { //Choose new target for the Russian Roulette lotto
+    // Choose new target for the Russian Roulette lotto
+    function UpdateRRouletteLottoTarget() private { 
         RRouletteLottoTarget=random() % RRouletteLottoDifficulty;
     }
-
-    function UpdateRRouletteLottoDifficulty(uint new_difficulty) public { //Update difficulty for Russian Roulette
+    
+    // Update difficulty for Russian Roulette
+    function UpdateRRouletteLottoDifficulty(uint new_difficulty) public { 
         require(msg.sender == lotteryManager); //Can only be updated by owner of contract
 	require(new_difficulty > 0,"The difficulty should be greater than 0");
 	RRouletteLottoDifficulty=new_difficulty;
     } 
     
-    function getRRouletteLottoFunds() public view returns(uint) { //See how much is up for grabs in the Russian Roulette lotto
+    // See how much is up for grabs in the Russian Roulette lotto
+    function getRRouletteLottoFunds() public view returns(uint) { 
         return RRouletteLottoFunds;
     } 
     
-    function RandomRRouletteEntry(uint guess) public payable { //Pay 1 eth to enter the Randomized Russian Roulette lotto
+    // Pay 1 eth to enter the Randomized Russian Roulette lotto
+    function RandomRRouletteEntry(uint guess) public payable { 
         require(msg.value == 1 ether, "Please pay exactly one ether");
         require(RandomEliminatedStatus[msg.sender]!=1, "Please wait until you may enter again");
 
@@ -199,23 +217,25 @@ contract Lottery {
         UpdateRandomRRouletteLottoTarget(); //Choose new target every guess to avoid process of elimination
     }
     
-    function UpdateRandomRRouletteLottoTarget() private { //Choose new Randomized Russian Roulette number
+    // Choose new Randomized Russian Roulette number
+    function UpdateRandomRRouletteLottoTarget() private { 
         RandomRRouletteLottoTarget=random() % RandomRRouletteLottoDifficulty; //Target based on Difficulty
     }
-
-    function UpdateRandomRRouletteLottoDifficulty(uint new_difficulty) public { //Update difficulty for Randomized Russian Roulette
+    
+    // Update difficulty for Randomized Russian Roulette
+    function UpdateRandomRRouletteLottoDifficulty(uint new_difficulty) public { 
         require(msg.sender == lotteryManager); //Can only be updated by owner of contract
 	require(new_difficulty > 0,"The difficulty should be greater than -");
 	RandomRRouletteLottoDifficulty=new_difficulty;
     } 
     
-    function getRandomRRouletteLottoFunds() public view returns(uint) { //See how much is up for grabs in Randomized Russian Roulette Lotto
+    // See how much is up for grabs in Randomized Russian Roulette Lotto
+    function getRandomRRouletteLottoFunds() public view returns(uint) { 
         return RandomRRouletteLottoFunds;
     } 
     
-
-    
-    function () public payable { //fallback function
+    // fallback function
+    function () public payable { 
         msg.sender.transfer(msg.value);
     }
     
