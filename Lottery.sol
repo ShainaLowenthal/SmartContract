@@ -16,28 +16,32 @@ contract Lottery {
     uint RRouletteLottoDifficulty;	// current guessing difficulty for Russian Roulette Lotto
     uint RandomRRouletteLottoDifficulty; // current guessing difficulty for Randomized Russian Roulette Lotto
 
-    address[] participantsMain;  	// This holds all participant addresses in the main lotto
-    address[] participantsWeighted;  	// This holds all participant addresses in the weighted lotto
-    mapping(address => uint) public weights;  	// This stores each participants betting weight in the weighted lotto
-    address[] EliminatedParticipantsRRoulette;  // This holds a list of all participants barred from the Russian roulette lotto
-    mapping(address => int) public EliminatedStatus; // This tracks whether a participant is banned from the russian roulette lotto or not. By default, each address is mapped to 0, which is acceptable. When an address guesses too poorly, it is switched to -1.
-    address[] EliminatedParticipantsRandomRRoulette; // This holds a list of all participants barred from the randomized Russian roulette lotto
-    mapping(address => uint) public RandomEliminatedStatus; // This tracks whether a participant is banned from the randomized russian roulette lotto or not. By default, each address is mapped to 0, which is acceptable. When an address guesses too poorly, it is switched to -1.
-    address public lotteryManager;     			    // This is the person in charge of the lottery
+    address[] participantsMain;  				// This holds all participant addresses in the main lotto
+    address[] participantsWeighted;  				// This holds all participant addresses in the weighted lotto
+    mapping(address => uint) public weights;  			// This stores each participants betting weight in the weighted lotto
+    address[] EliminatedParticipantsRRoulette;  		// This holds a list of all participants barred from the Russian roulette lotto
+    mapping(address => int) public EliminatedStatus; 		// This tracks whether a participant is banned from the russian roulette lotto or not. 
+    								// By default, each address is mapped to 0, which is acceptable. When an address guesses 
+								// too poorly, it is switched to -1.
+    address[] EliminatedParticipantsRandomRRoulette; 		// This holds a list of all participants barred from the randomized Russian roulette lotto
+    mapping(address => uint) public RandomEliminatedStatus; 	// This tracks whether a participant is banned from the randomized russian roulette lotto or not. 
+    								// By default, each address is mapped to 0, which is acceptable. When an address guesses too 
+								// poorly, it is switched to -1.
+    address public lotteryManager;     			    	// This is the person in charge of the lottery
 
     constructor() public {
-	lotteryManager=msg.sender; // set the owner to the contract creator
-	MainLottoFunds=0; // no funds at first in Main Lotto
-	GuessingLottoFunds=0; // no funds at first in Guessing Lotto
-	WeightedLottoFunds=0; // no funds at first in Weighted Lotto
-	RRouletteLottoFunds=0; // no funds at first in Russian Roulette Lotto
-	RandomRRouletteLottoFunds=0; // no funds at first in Randomized Russian Roulette Lotto
-	GuessingLottoDifficulty=10;
-	RRouletteLottoDifficulty=10;
-	RandomRRouletteLottoDifficulty=10;
-	UpdateGuessingLottoTarget(); // create initial target for Guessing lotto
-	UpdateRRouletteLottoTarget(); // create initial target for Russian Roulette Lotto
-        UpdateRandomRRouletteLottoTarget(); // create initial target for Randomized Russian Roulette Lotto
+	lotteryManager=msg.sender; 		// set the owner to the contract creator
+	MainLottoFunds=0;			// no funds at first in Main Lotto
+	GuessingLottoFunds=0; 			// no funds at first in Guessing Lotto
+	WeightedLottoFunds=0; 			// no funds at first in Weighted Lotto
+	RRouletteLottoFunds=0; 			// no funds at first in Russian Roulette Lotto
+	RandomRRouletteLottoFunds=0; 		// no funds at first in Randomized Russian Roulette Lotto
+	GuessingLottoDifficulty=10;		// will decide how difficult it is to guess the target
+	RRouletteLottoDifficulty=10;		// will decide how difficult it is to guess the target
+	RandomRRouletteLottoDifficulty=10;	// will decide how difficult it is to guess the target
+	UpdateGuessingLottoTarget(); 		// create initial target for Guessing lotto
+	UpdateRRouletteLottoTarget(); 		// create initial target for Russian Roulette Lotto
+        UpdateRandomRRouletteLottoTarget(); 	// create initial target for Randomized Russian Roulette Lotto
 
     }
     
@@ -114,6 +118,7 @@ contract Lottery {
         WeightedLottoFunds+=msg.value; //The money you paid is added to the pot
     }
     
+    // Declare a winner for weighted lotto, give them the pot, reset the pot and participants
     function WeightedLottoEnd() public {
         require(msg.sender == lotteryManager); //Can only be ended by owner of contract
         uint winning_weight = random() % (WeightedLottoFunds  / 1000000000000000000); //Choose a random weight (winner contributed weight in this interval)
@@ -204,13 +209,13 @@ contract Lottery {
         if (guess==RandomRRouletteLottoTarget) { //If your guess is exactly right
             msg.sender.transfer(RandomRRouletteLottoFunds); //You get the pot
             RandomRRouletteLottoFunds=0; //Reset the pot
-            for (uint i=0;i<EliminatedParticipantsRandomRRoulette.length;i++) { //Go through list of eliminated participants
-                RandomEliminatedStatus[EliminatedParticipantsRandomRRoulette[i]]=0; //Remove them from the blacklist
+            for (uint i=0;i<EliminatedParticipantsRandomRRoulette.length;i++) { 	//Go through list of eliminated participants
+                RandomEliminatedStatus[EliminatedParticipantsRandomRRoulette[i]]=0; 	//Remove them from the blacklist
             }
             delete EliminatedParticipantsRandomRRoulette;
 	        EliminatedParticipantsRandomRRoulette = new address[](0);
         }
-        else if (random() % 6 != 1) { //1/6 chance you can try again
+        else if (random() % 6 != 1) { 	// 1/6 chance you can try again
             EliminatedParticipantsRandomRRoulette.push(msg.sender); //if you fail, you're blacklisted
             RandomEliminatedStatus[msg.sender]=1;
         }
@@ -239,6 +244,7 @@ contract Lottery {
         msg.sender.transfer(msg.value);
     }
     
+    // destroy function
     function destroy() public  {
         if (msg.sender == lotteryManager) selfdestruct(lotteryManager);
     }
