@@ -16,6 +16,7 @@ contract LottoTest {
     uint y;
     
     // 'beforeAll' runs before all other tests
+    // previously declared vars are defined here
     function beforeAll() public {
         lotteryToTest = new Lottery();
         participants = lotteryToTest.getMainLottoPlayers();
@@ -27,33 +28,31 @@ contract LottoTest {
     // check that the owner isn't a random person so that the lottery can't be opened or closed by anyone other than the owner
     function checkOwner() public
     {
-       Assert.equal(lotteryToTest.getOwner(), owner, "owner is sender");
+       Assert.equal(lotteryToTest.getOwner(), owner, "owner is sender"); // checks if the owner address is the correct address
     }
     
     // checks that the sender and values aren't invalid
-    function checkSenderAndValue() public payable {
-        // checks that the sender isn't invalid
-        for (uint i = 0; i < participants.length; i++)
+    function checkSenderAndValue() public payable {        
+        for (uint i = 0; i < participants.length; i++) // checks that the sender isn't invalid by iterating over list of participants
         {
             Assert.equal(msg.sender, participants[i], "Invalid sender");
-        }
-        // checks that the values sent isn't invalid
-        Assert.equal(msg.value, 0, "Lotto entry is 1 ether"); //why is this only running for 0 when eth receiving should be 1?
+        }        
+        Assert.equal(msg.value, 0, "Lotto entry is 1 ether"); // checks that the values sent isn't invalid
     }
  
     // checks that the lottery is even possible i.e. if there are any participants and funds
     function checkFundsAndPlayersGreaterThanZeroMainLotto() public {
-        while (lotteryToTest.getMainLottoFunds() > 0)
+        while (lotteryToTest.getMainLottoFunds() > 0) 
         {
-            x = lotteryToTest.getMainLottoFunds();
+            x = lotteryToTest.getMainLottoFunds(); // resets lottery funds var x if there are funds available
         }
         
-        while (participants.length > 0)
+        while (participants.length > 0) 
         {
-            y = participants.length;
-            Assert.equal(lotteryToTest.getMainLottoFunds(), y*1000000000000000000, "check if correct funds");
+            y = participants.length; // resets lottery participants var y if there are participants available
+            Assert.equal(lotteryToTest.getMainLottoFunds(), y*1000000000000000000, "check if correct funds"); // checks if the funds are correct based on the number of participants
         }
-        Assert.equal(lotteryToTest.getMainLottoFunds(), x, "No lottery if no funds");
-        Assert.equal(participants.length, y, "No lottery if no partipants");       
+        Assert.equal(lotteryToTest.getMainLottoFunds(), x, "No lottery if no funds"); // checks if lottery is possible based on funding
+        Assert.equal(participants.length, y, "No lottery if no partipants"); // checks if lottery is possible based on participants
     }
 }
