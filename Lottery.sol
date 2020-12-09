@@ -88,6 +88,7 @@ contract Lottery {
     
     function UpdateGuessingLottoDifficulty(uint new_difficulty) public { //Update difficulty for Guessing Lotto
         require(msg.sender == lotteryManager); //Can only be updated by owner of contract
+	require(new_difficulty > 0,"The difficulty should be greater than 0");
 	    GuessingLottoDifficulty=new_difficulty;
     } 
     
@@ -169,7 +170,8 @@ contract Lottery {
 
     function UpdateRRouletteLottoDifficulty(uint new_difficulty) public { //Update difficulty for Russian Roulette
         require(msg.sender == lotteryManager); //Can only be updated by owner of contract
-	    RRouletteLottoDifficulty=new_difficulty;
+	require(new_difficulty > 0,"The difficulty should be greater than 0");
+	RRouletteLottoDifficulty=new_difficulty;
     } 
     
     function getRRouletteLottoFunds() public view returns(uint) { //See how much is up for grabs in the Russian Roulette lotto
@@ -203,7 +205,8 @@ contract Lottery {
 
     function UpdateRandomRRouletteLottoDifficulty(uint new_difficulty) public { //Update difficulty for Randomized Russian Roulette
         require(msg.sender == lotteryManager); //Can only be updated by owner of contract
-	    RandomRRouletteLottoDifficulty=new_difficulty;
+	require(new_difficulty > 0,"The difficulty should be greater than -");
+	RandomRRouletteLottoDifficulty=new_difficulty;
     } 
     
     function getRandomRRouletteLottoFunds() public view returns(uint) { //See how much is up for grabs in Randomized Russian Roulette Lotto
